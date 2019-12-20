@@ -1,0 +1,96 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> create database bank;
+Query OK, 1 row affected (0.16 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use bank;
+Database changed
+mysql> create table accounts (name char(30), account_no long, phone_number long);
+Query OK, 0 rows affected (0.71 sec)
+
+mysql> desc accounts;
++--------------+------------+------+-----+---------+-------+
+| Field        | Type       | Null | Key | Default | Extra |
++--------------+------------+------+-----+---------+-------+
+| name         | char(30)   | YES  |     | NULL    |       |
+| account_no   | mediumtext | YES  |     | NULL    |       |
+| phone_number | mediumtext | YES  |     | NULL    |       |
++--------------+------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into accounts values('vandana',201611578,9989417319);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into accounts values('vandana',201689308,8179498516);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into accounts values('thanuja',201675430,8143882123);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into accounts values('kaveri',201621784,9618452347);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from accounts;
++---------+------------+--------------+
+| name    | account_no | phone_number |
++---------+------------+--------------+
+| vandana | 201611578  | 99894179   |
+| vandana | 201689308  | 81794986   |
+| thanuja | 201675430  | 81438823   |
+| kaveri  | 201621784  | 96184527   |
++---------+------------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> alter table accounts rename atm;
+Query OK, 0 rows affected (0.65 sec)
+
+mysql> select * from atm;
++---------+------------+--------------+
+| name    | account_no | phone_number |
++---------+------------+--------------+
+| vandana | 201611578  | 9989417319   |
+| vandana | 201689308  | 8179498516   |
+| thanuja | 201675430  | 8143882123   |
+| kaveri  | 201621784  | 9618452347   |
++---------+------------+--------------+
+4 rows in set (0.04 sec)
+
+mysql> alter table atm rename column phone_number to mobile_number;
+Query OK, 0 rows affected (0.57 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from atm;
++---------+------------+---------------+
+| name    | account_no | mobile_number |
++---------+------------+---------------+
+| vandana | 201611578  | 9989417319    |
+| vandana | 201689308  | 8179498516    |
+| thanuja | 201675430  | 8143882123    |
+| kaveri  | 201621784  | 9618452347    |
++---------+------------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> Terminal close -- exit!

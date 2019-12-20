@@ -1,0 +1,367 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| amazon             |
+| bank               |
+| company            |
+| company1           |
+| information_schema |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sys                |
++--------------------+
+9 rows in set (1.20 sec)
+
+mysql> create database sailor_db;
+Query OK, 1 row affected (0.47 sec)
+
+mysql> use sailor_db;
+Database changed
+mysql> create table sailor(sid int,sname char(10),rating int,age int);
+Query OK, 0 rows affected (1.71 sec)
+
+mysql> desc sailor;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| sid    | int(11)  | YES  |     | NULL    |       |
+| sname  | char(10) | YES  |     | NULL    |       |
+| rating | int(11)  | YES  |     | NULL    |       |
+| age    | int(11)  | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+4 rows in set (0.06 sec)
+
+mysql> alter table sailor add primary key(sid);
+Query OK, 0 rows affected (1.80 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc sailor;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| sid    | int(11)  | NO   | PRI | NULL    |       |
+| sname  | char(10) | YES  |     | NULL    |       |
+| rating | int(11)  | YES  |     | NULL    |       |
+| age    | int(11)  | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table reserve(sid int,bid int,day date);
+Query OK, 0 rows affected (0.71 sec)
+
+mysql> desc reserve;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  |     | NULL    |       |
+| bid   | int(11) | YES  |     | NULL    |       |
+| day   | date    | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table reserve  add foreign key (sid) references sailor(sid);
+Query OK, 0 rows affected (2.53 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc reserve;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  | MUL | NULL    |       |
+| bid   | int(11) | YES  |     | NULL    |       |
+| day   | date    | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.03 sec)
+
+mysql> alter table reserve add primary key(bid);
+Query OK, 0 rows affected (1.67 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create table boat(bid int,bname char(10),colour char(10));
+Query OK, 0 rows affected (0.73 sec)
+
+mysql> alter table boat add primary key(bid);
+Query OK, 0 rows affected (1.54 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table reserve add foreign key(bid) references boat(bid);
+Query OK, 0 rows affected (2.95 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++---------------------+
+| Tables_in_sailor_db |
++---------------------+
+| boat                |
+| reserve             |
+| sailor              |
++---------------------+
+3 rows in set (0.08 sec)
+
+mysql> desc sailor;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| sid    | int(11)  | NO   | PRI | NULL    |       |
+| sname  | char(10) | YES  |     | NULL    |       |
+| rating | int(11)  | YES  |     | NULL    |       |
+| age    | int(11)  | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> insert into sailor values(101,"ram",4,32);
+Query OK, 1 row affected (0.18 sec)
+
+mysql> insert into sailor values(102,"sam",4,NULL);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into sailor values(103,"Zi",2,23);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into sailor values(104,"abhi",5,25);
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into sailor values(105,"akash",3,20);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into sailor values(106,"abhishek",1,35);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into sailor values(107,"bachan",3,35);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into sailor values(108,"bachan",5,34);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into sailor values(109,"akhil",3,25);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into sailor values(110,"james",2,37);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select *from sailor;
++-----+----------+--------+------+
+| sid | sname    | rating | age  |
++-----+----------+--------+------+
+| 101 | ram      |      4 |   32 |
+| 102 | sam      |      4 | NULL |
+| 103 | Zi       |      2 |   23 |
+| 104 | abhi     |      5 |   25 |
+| 105 | akash    |      3 |   20 |
+| 106 | abhishek |      1 |   35 |
+| 107 | bachan   |      3 |   35 |
+| 108 | bachan   |      5 |   34 |
+| 109 | akhil    |      3 |   25 |
+| 110 | james    |      2 |   37 |
++-----+----------+--------+------+
+10 rows in set (0.00 sec)
+
+mysql> desc reserve;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  | MUL | NULL    |       |
+| bid   | int(11) | NO   | PRI | NULL    |       |
+| day   | date    | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table reserve add foreign key(bid) references boat(bid);
+Query OK, 0 rows affected (2.60 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc reserve;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  | MUL | NULL    |       |
+| bid   | int(11) | NO   | PRI | NULL    |       |
+| day   | date    | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> drop table reserve;
+Query OK, 0 rows affected (0.67 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_sailor_db |
++---------------------+
+| boat                |
+| sailor              |
++---------------------+
+2 rows in set (0.00 sec)
+
+mysql> desc boat;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| bid    | int(11)  | NO   | PRI | NULL    |       |
+| bname  | char(10) | YES  |     | NULL    |       |
+| colour | char(10) | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into boat values(1,"titanic","red");
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into boat values(2,"titanic","green");
+Query OK, 1 row affected (0.20 sec)
+
+mysql> insert into boat values(3,"titanic","blue");
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into boat values(4,"clipper","blue");
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into boat values(5,"clipper","black");
+Query OK, 1 row affected (0.10 sec)
+
+mysql> create table reserve(sid int,bid int,day date);
+Query OK, 0 rows affected (0.64 sec)
+
+mysql> alter table reserve add foreign key(sid) references sailor(sid);
+Query OK, 0 rows affected (2.20 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table reserve add foreign key(bid) references boat(bid);
+Query OK, 0 rows affected (2.48 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc boat;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| bid    | int(11)  | NO   | PRI | NULL    |       |
+| bname  | char(10) | YES  |     | NULL    |       |
+| colour | char(10) | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+3 rows in set (0.06 sec)
+
+mysql> desc reserve;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  | MUL | NULL    |       |
+| bid   | int(11) | YES  | MUL | NULL    |       |
+| day   | date    | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc reserve;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  | MUL | NULL    |       |
+| bid   | int(11) | YES  | MUL | NULL    |       |
+| day   | date    | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into reserve values(101,1,'2019-8-23');
+Query OK, 1 row affected (0.19 sec)
+
+mysql> insert into reserve values(101,2,'2019-8-26');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into reserve values(104,3,'2019-10-02');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into reserve values(105,5,'2019-10-10');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into reserve values(104,3,'2019-10-10');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into reserve values(107,3,'2019-10-10');
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into reserve values(NULL,3,'2019-10-10');
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into reserve values(108,3,'2019-10-10');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into reserve values(108,NULL,'2019-10-23');
+Query OK, 1 row affected (0.15 sec)
+
+mysql> insert into reserve values(108,5,'2019-10-12');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into reserve values(102,4,'2019-10-5');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into reserve values(110,4,'2019-10-5');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select *from reserve;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|  101 |    1 | 2019-08-23 |
+|  101 |    2 | 2019-08-26 |
+|  104 |    3 | 2019-10-02 |
+|  105 |    5 | 2019-10-10 |
+|  104 |    3 | 2019-10-10 |
+|  107 |    3 | 2019-10-10 |
+| NULL |    3 | 2019-10-10 |
+|  108 |    3 | 2019-10-10 |
+|  108 | NULL | 2019-10-23 |
+|  108 |    5 | 2019-10-12 |
+|  102 |    4 | 2019-10-05 |
+|  110 |    4 | 2019-10-05 |
++------+------+------------+
+12 rows in set (0.00 sec)
+
+mysql> select *from sailor;
++-----+----------+--------+------+
+| sid | sname    | rating | age  |
++-----+----------+--------+------+
+| 101 | ram      |      4 |   32 |
+| 102 | sam      |      4 | NULL |
+| 103 | Zi       |      2 |   23 |
+| 104 | abhi     |      5 |   25 |
+| 105 | akash    |      3 |   20 |
+| 106 | abhishek |      1 |   35 |
+| 107 | bachan   |      3 |   35 |
+| 108 | bachan   |      5 |   34 |
+| 109 | akhil    |      3 |   25 |
+| 110 | james    |      2 |   37 |
++-----+----------+--------+------+
+10 rows in set (0.00 sec)
+
+mysql> select *from boat;
++-----+---------+--------+
+| bid | bname   | colour |
++-----+---------+--------+
+|   1 | titanic | red    |
+|   2 | titanic | green  |
+|   3 | titanic | blue   |
+|   4 | clipper | blue   |
+|   5 | clipper | black  |
++-----+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select age from sailor where sname="bachan";
++------+
+| age  |
++------+
+|   35 |
+|   34 |
++------+
+2 rows in set (0.01 sec)
+
+mysql> select age ,sname from sailor where rating>3;
++------+--------+
+| age  | sname  |
++------+--------+
+|   32 | ram    |
+| NULL | sam    |
+|   25 | abhi   |
+|   34 | bachan |
++------+--------+
+4 rows in set (0.00 sec)
+
+mysql> exit;

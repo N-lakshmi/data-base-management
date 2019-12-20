@@ -1,0 +1,111 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| amazon             |
+| bank               |
+| class              |
+| company            |
+| company1           |
+| company_database   |
+| information_schema |
+| kumari15           |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sailor_db          |
+| sys                |
+| w3                 |
++--------------------+
+14 rows in set (0.07 sec)
+
+mysql> use company_database
+Database changed
+mysql> show tables;
++----------------------------+
+| Tables_in_company_database |
++----------------------------+
+| department                 |
+| dependent                  |
+| employee                   |
+| project                    |
+| workson                    |
++----------------------------+
+5 rows in set (0.04 sec)
+
+mysql> create view hidh_salary as select * from employee where salary>200000;
+Query OK, 0 rows affected (1.23 sec)
+
+mysql> select * from high_salary;
+ERROR 1146 (42S02): Table 'company_database.high_salary' doesn't exist
+mysql> select * from hidh_salary;
++--------+---------+-----+------+--------+---------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary  | address    | dno  | sssn |
++--------+---------+-----+------+--------+---------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 3680000 | Mumbai     |   10 | NULL |
+| jack   | thomson | 102 |   23 | male   | 5280000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 2400000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female |  270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   |  420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   |  240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   |  350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   |  370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   |  460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   |  320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female |  250000 | chennai    |   13 |  110 |
++--------+---------+-----+------+--------+---------+------------+------+------+
+11 rows in set (0.03 sec)
+
+mysql> create view hidh_salary as select * from employee where salary>20000000;
+ERROR 1050 (42S01): Table 'hidh_salary' already exists
+mysql> select * from department;
++------------+--------+---------+---------------+
+| dname      | deptno | mangssn | starting_date |
++------------+--------+---------+---------------+
+| production |     10 |     102 | 2000-10-27    |
+| finance    |     11 |     105 | 1999-08-12    |
+| marketing  |     12 |     108 | 1999-10-23    |
+| purchasing |     13 |     111 | 2002-01-26    |
++------------+--------+---------+---------------+
+4 rows in set (0.03 sec)
+
+mysql> create view pro_dept as select * from employee e, department d where dname="production" and d.dno=e.dno;
+Query OK, 0 rows affected (0.35 sec)
+
+query ok wrong output
+mysql> select * from pro_dept;
++--------+---------+-----+------+--------+---------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary  | address    | dno  | sssn |
++--------+---------+-----+------+--------+---------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 3680000 | Mumbai     |   10 | NULL |
+| jack   | thomson | 102 |   23 | male   | 5280000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 2400000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female |  270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   |  420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   |  240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   |  350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   |  370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   |  460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   |  320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female |  250000 | chennai    |   13 |  110 |
++--------+---------+-----+------+--------+---------+------------+------+------+
+11 rows in set (0.03 sec)
+
+mysql> create view senior_employee as select * from employee where age>=30;
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> select * from senior_employee;
++--------+---------+-----+------+--------+---------+-----------+------+------+
+| fname  | lname   | ssn | age  | gender | salary  | address   | dno  | sssn |
++--------+---------+-----+------+--------+---------+-----------+------+------+
+| andy   | thomson | 101 |   34 | female | 3680000 | Mumbai    |   10 | NULL |
+| amaya  | james   | 104 |   34 | female |  270000 | Jammu     |   11 | NULL |
+| davis  | miller  | 106 |   32 | male   |  240000 | hyderabad |   11 |  104 |
+| wilson | jones   | 108 |   32 | male   |  370000 | Delhi     |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   |  460000 | kolkata   |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   |  320000 | hyderabad |   13 | NULL |
+| zi     | yu      | 111 |   36 | female |  250000 | chennai   |   13 |  110 |
++--------+---------+-----+------+--------+---------+-----------+------+------+
+7 rows in set (0.00 sec)
+
+mysql> Terminal close -- exit!

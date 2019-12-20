@@ -1,0 +1,695 @@
+
+mysql> use company_database;
+Database changed
+mysql> show tables;
++----------------------------+
+| Tables_in_company_database |
++----------------------------+
+| department                 |
+| dependent                  |
+| employee                   |
+| project                    |
+| workson                    |
++----------------------------+
+5 rows in set (0.22 sec)
+
+mysql> select *from employee;
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female | 270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   | 240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female | 250000 | chennai    |   13 |  110 |
++--------+---------+-----+------+--------+--------+------------+------+------+
+11 rows in set (0.26 sec)
+
+mysql> select *from employee where fname="amaya" and lname="james";
++-------+-------+-----+------+--------+--------+---------+------+------+
+| fname | lname | ssn | age  | gender | salary | address | dno  | sssn |
++-------+-------+-----+------+--------+--------+---------+------+------+
+| amaya | james | 104 |   34 | female | 270000 | Jammu   |   11 | NULL |
++-------+-------+-----+------+--------+--------+---------+------+------+
+1 row in set (0.02 sec)
+
+mysql> select *from project;
++---------+-----+------------+------+
+| pname   | pid | plocation  | dnum |
++---------+-----+------------+------+
+| green   |   1 | norway     |   10 |
+| eagle   |   2 | chennai    |   12 |
+| lion    |   3 | kakinada   |   10 |
+| panther |   4 | trivendram |   13 |
++---------+-----+------------+------+
+4 rows in set (0.07 sec)
+
+mysql> select *from department;
++------------+--------+---------+---------------+
+| dname      | deptno | mangssn | starting_date |
++------------+--------+---------+---------------+
+| production |     10 |     102 | 2000-10-02    |
+| finance    |     11 |     105 | 1999-08-12    |
+| marketing  |     12 |     108 | 1999-10-23    |
+| purchasing |     13 |     111 | 2002-01-26    |
++------------+--------+---------+---------------+
+4 rows in set (0.10 sec)
+
+mysql> select fname,lname,address from employee, department where deptno=dno and dname="production";
++-------+---------+---------+
+| fname | lname   | address |
++-------+---------+---------+
+| andy  | thomson | Mumbai  |
+| jack  | thomson | Delhi   |
+| nick  | james   | Kolkata |
++-------+---------+---------+
+3 rows in set (0.03 sec)
+
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada",pid=deptno,deptno=dno,mngssn=ssn;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',pid=deptno,deptno=dno,mngssn=ssn' at line 1
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada",pid=deptno,deptno=dno,mngssn=sssn;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',pid=deptno,deptno=dno,mngssn=sssn' at line 1
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada" pid=deptno deptno=dno mngssn=sssn;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'pid=deptno deptno=dno mngssn=sssn' at line 1
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada" and pid=deptno and deptno=dno and mngssn=sssn;
+ERROR 1054 (42S22): Unknown column 'mngssn' in 'where clause'
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada" and pid=deptno and deptno=dno and mangssn=sssn;
+Empty set (0.00 sec)
+
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada" and pid=deptno and deptno=dno and mangssn=ssn;
+Empty set (0.00 sec)
+
+mysql> select pid,dno,fname,lname,address from employee,department,project where plocation="kakinada" and dnum=deptno and deptno=dno and mangssn=ssn;
++-----+------+-------+---------+---------+
+| pid | dno  | fname | lname   | address |
++-----+------+-------+---------+---------+
+|   3 |   10 | jack  | thomson | Delhi   |
++-----+------+-------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> select a.fname as_supervisor_fname,a.lname as_supervisor_lname,b.fname as_emp_fname,b.lname as_supervisor_lname from employee a,employee b where a.ssn=b.sssn;
++---------------------+---------------------+--------------+---------------------+
+| as_supervisor_fname | as_supervisor_lname | as_emp_fname | as_supervisor_lname |
++---------------------+---------------------+--------------+---------------------+
+| andy                | thomson             | jack         | thomson             |
+| andy                | thomson             | nick         | james               |
+| amaya               | james               | jace         | miller              |
+| amaya               | james               | davis        | miller              |
+| wilson              | miller              | wilson       | jones               |
+| wilson              | miller              | smith        | johnson             |
+| smith               | jordan              | zi           | yu                  |
++---------------------+---------------------+--------------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> select disticnt salary from employee;
+ERROR 1054 (42S22): Unknown column 'disticnt' in 'field list'
+mysql> select distinct salary from employee;
++--------+
+| salary |
++--------+
+| 230000 |
+| 330000 |
+| 150000 |
+| 270000 |
+| 420000 |
+| 240000 |
+| 350000 |
+| 370000 |
+| 460000 |
+| 320000 |
+| 250000 |
++--------+
+11 rows in set (0.02 sec)
+
+mysql> select a.* from employee a,employee b where a.salary <> b.salary group by salary;
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female | 270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   | 240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female | 250000 | chennai    |   13 |  110 |
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |
++--------+---------+-----+------+--------+--------+------------+------+------+
+11 rows in set (0.02 sec)
+
+mysql> select *from workson;
++------+------+-------+
+| wdno | wpid | hours |
++------+------+-------+
+|   10 |    1 |    24 |
+|   12 |    2 |    48 |
+|   10 |    3 |    38 |
+|   13 |    4 |    53 |
++------+------+-------+
+4 rows in set (0.08 sec)
+
+mysql> select pid,fname,lname,dno from employee,workson,department,project where lname="miller" and (ssn=sssn or mangssn=ssn) and dno=deptno and pid=wpid;
++-----+-------+--------+------+
+| pid | fname | lname  | dno  |
++-----+-------+--------+------+
+|   1 | jace  | miller |   11 |
+|   2 | jace  | miller |   11 |
+|   3 | jace  | miller |   11 |
+|   4 | jace  | miller |   11 |
++-----+-------+--------+------+
+4 rows in set (0.02 sec)
+
+mysql> selct *from employee where lname like %lle% and fname like "j%";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct *from employee where lname like %lle% and fname like "j%"' at line 1
+mysql> select *from employee where lname like %lle% and fname like "j%";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%lle% and fname like "j%"' at line 1
+mysql> select *from employee where lname like "%lle%" and fname like "j%";
++-------+--------+-----+------+--------+--------+---------+------+------+
+| fname | lname  | ssn | age  | gender | salary | address | dno  | sssn |
++-------+--------+-----+------+--------+--------+---------+------+------+
+| jace  | miller | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 |
++-------+--------+-----+------+--------+--------+---------+------+------+
+1 row in set (0.03 sec)
+
+mysql> select *from employee where dno=10 and salary between 300000 and 400000;
++-------+---------+-----+------+--------+--------+---------+------+------+
+| fname | lname   | ssn | age  | gender | salary | address | dno  | sssn |
++-------+---------+-----+------+--------+--------+---------+------+------+
+| jack  | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 |
++-------+---------+-----+------+--------+--------+---------+------+------+
+1 row in set (0.03 sec)
+
+mysql> update employee,department set salary=salary(salary*0.5) where dno=deptno and dname="production";
+ERROR 1305 (42000): FUNCTION company_database.salary does not exist
+mysql> update department, employee set salary=salary(salary*0.5) where dno=deptno and dname="production";
+ERROR 1305 (42000): FUNCTION company_database.salary does not exist
+mysql> update department, employee set salary=salary(salary*0.5) where dno=deptno and dname="production";
+ERROR 1305 (42000): FUNCTION company_database.salary does not exist
+mysql> select fname,lname,address from employee,department where dno=deptno group by dname;
++--------+---------+------------+
+| fname  | lname   | address    |
++--------+---------+------------+
+| andy   | thomson | Mumbai     |
+| amaya  | james   | Jammu      |
+| wilson | miller  | amaravathi |
+| smith  | jordan  | hyderabad  |
++--------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select fname,lname,address,dname from employee,department where dno=deptno group by dname;
++--------+---------+------------+------------+
+| fname  | lname   | address    | dname      |
++--------+---------+------------+------------+
+| andy   | thomson | Mumbai     | production |
+| amaya  | james   | Jammu      | finance    |
+| wilson | miller  | amaravathi | marketing  |
+| smith  | jordan  | hyderabad  | purchasing |
++--------+---------+------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select fname,lname from employee,project,department from dno=10 and dno=deptno and dno=dnum;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from dno=10 and dno=deptno and dno=dnum' at line 1
+mysql> select fname,lname from employee,project,department where dno=10 and dno=deptno and dno=dnum;
++-------+---------+
+| fname | lname   |
++-------+---------+
+| andy  | thomson |
+| jack  | thomson |
+| nick  | james   |
+| andy  | thomson |
+| jack  | thomson |
+| nick  | james   |
++-------+---------+
+6 rows in set (0.06 sec)
+
+mysql> select *from dependent;
++------+------+------------+------------+
+| did  | essn | depen_name | depen_add  |
++------+------+------------+------------+
+| 1001 |  102 | usha       | nuzvid     |
+| 1002 |  105 | ramesh     | srikakulam |
+| 1003 |  108 | radha      | krishna    |
+| 1004 |  105 | rajesh     | krishna    |
+| 1005 |  105 | rajesh     | nuzvid     |
+| 1006 |  108 | ravani     | vizag      |
++------+------+------------+------------+
+6 rows in set (0.06 sec)
+
+mysql> select *from employee,dependent where ssn=essn;
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| fname  | lname   | ssn | age  | gender | salary | address | dno  | sssn | did  | essn | depen_name | depen_add  |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 | 1001 |  102 | usha       | nuzvid     |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1002 |  105 | ramesh     | srikakulam |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1003 |  108 | radha      | krishna    |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1004 |  105 | rajesh     | krishna    |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1005 |  105 | rajesh     | nuzvid     |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1006 |  108 | ravani     | vizag      |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select * distinct ssn from employee,dependent where ssn=essn;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct ssn from employee,dependent where ssn=essn' at line 1
+
+mysql> select *from employee,dependent,department where essn=mangssn and essn=ssn;
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+------------+--------+---------+---------------+
+| fname  | lname   | ssn | age  | gender | salary | address | dno  | sssn | did  | essn | depen_name | depen_add  | dname      | deptno | mangssn | starting_date |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+------------+--------+---------+---------------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 | 1001 |  102 | usha       | nuzvid     | production |     10 |     102 | 2000-10-02    |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1002 |  105 | ramesh     | srikakulam | finance    |     11 |     105 | 1999-08-12    |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1003 |  108 | radha      | krishna    | marketing  |     12 |     108 | 1999-10-23    |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1004 |  105 | rajesh     | krishna    | finance    |     11 |     105 | 1999-08-12    |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1005 |  105 | rajesh     | nuzvid     | finance    |     11 |     105 | 1999-08-12    |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1006 |  108 | ravani     | vizag      | marketing  |     12 |     108 | 1999-10-23    |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+------------+--------+---------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from employee ,workson where wpid in(1,2) and essn=ssn;
+ERROR 1054 (42S22): Unknown column 'essn' in 'where clause'
+mysql> select * from employee ,workson where wpid in(1,2) and sssn=ssn;
+Empty set (0.02 sec)
+
+mysql> select * from employee ,workson where wpid in(1,2,3,4) and sssn=ssn;
+Empty set (0.00 sec)
+
+mysql> select * from employee ,project where pid in(1,2,3,4) and dnum=dno;
++--------+---------+-----+------+--------+--------+------------+------+------+---------+-----+------------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn | pname   | pid | plocation  | dnum |
++--------+---------+-----+------+--------+--------+------------+------+------+---------+-----+------------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL | green   |   1 | norway     |   10 |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 | green   |   1 | norway     |   10 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 | green   |   1 | norway     |   10 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL | eagle   |   2 | chennai    |   12 |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 | eagle   |   2 | chennai    |   12 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 | eagle   |   2 | chennai    |   12 |
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL | lion    |   3 | kakinada   |   10 |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 | lion    |   3 | kakinada   |   10 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 | lion    |   3 | kakinada   |   10 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL | panther |   4 | trivendram |   13 |
+| zi     | yu      | 111 |   36 | female | 250000 | chennai    |   13 |  110 | panther |   4 | trivendram |   13 |
++--------+---------+-----+------+--------+--------+------------+------+------+---------+-----+------------+------+
+11 rows in set (0.00 sec)
+
+mysql> select * from employee ,project where pid in(1,2,4) and dnum=dno;
++--------+---------+-----+------+--------+--------+------------+------+------+---------+-----+------------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn | pname   | pid | plocation  | dnum |
++--------+---------+-----+------+--------+--------+------------+------+------+---------+-----+------------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL | green   |   1 | norway     |   10 |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 | green   |   1 | norway     |   10 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 | green   |   1 | norway     |   10 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL | eagle   |   2 | chennai    |   12 |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 | eagle   |   2 | chennai    |   12 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 | eagle   |   2 | chennai    |   12 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL | panther |   4 | trivendram |   13 |
+| zi     | yu      | 111 |   36 | female | 250000 | chennai    |   13 |  110 | panther |   4 | trivendram |   13 |
++--------+---------+-----+------+--------+--------+------------+------+------+---------+-----+------------+------+
+8 rows in set (0.00 sec)
+
+mysql> select *from employee,dependent where essn=ssn group by ssn having count(essn)>1;
++--------+--------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| fname  | lname  | ssn | age  | gender | salary | address | dno  | sssn | did  | essn | depen_name | depen_add  |
++--------+--------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| jace   | miller | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1002 |  105 | ramesh     | srikakulam |
+| wilson | jones  | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1003 |  108 | radha      | krishna    |
++--------+--------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+2 rows in set (0.08 sec)
+
+mysql> select *from employee,dependent where essn=ssn group by ssn having count(essn)>=1;
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| fname  | lname   | ssn | age  | gender | salary | address | dno  | sssn | did  | essn | depen_name | depen_add  |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 | 1001 |  102 | usha       | nuzvid     |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1002 |  105 | ramesh     | srikakulam |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1003 |  108 | radha      | krishna    |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select *from employee,dependent where exists (select essn from dependent where ssn=essn) and ssn=essn;
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| fname  | lname   | ssn | age  | gender | salary | address | dno  | sssn | did  | essn | depen_name | depen_add  |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 | 1001 |  102 | usha       | nuzvid     |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1002 |  105 | ramesh     | srikakulam |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1004 |  105 | rajesh     | krishna    |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1005 |  105 | rajesh     | nuzvid     |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1003 |  108 | radha      | krishna    |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1006 |  108 | ravani     | vizag      |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+6 rows in set (0.10 sec)
+
+mysql> select dname,count(ssn) as no_of_employee from employee department where dnum=dno group by dname;
+ERROR 1054 (42S22): Unknown column 'dname' in 'field list'
+mysql> select dname,count(ssn) as no_of_employee from employee, department where dnum=dno group by dname;
+ERROR 1054 (42S22): Unknown column 'dnum' in 'where clause'
+mysql> select dname,count(ssn) as no_of_employee from employee, department where deptnum=dno group by dname;
+ERROR 1054 (42S22): Unknown column 'deptnum' in 'where clause'
+mysql> select dname,count(ssn) as no_of_employee from employee, department where deptno=dno group by dname;
++------------+----------------+
+| dname      | no_of_employee |
++------------+----------------+
+| production |              3 |
+| finance    |              3 |
+| marketing  |              3 |
+| purchasing |              2 |
++------------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select *from employee,dependent where essn=ssn group by ssn;
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| fname  | lname   | ssn | age  | gender | salary | address | dno  | sssn | did  | essn | depen_name | depen_add  |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 | 1001 |  102 | usha       | nuzvid     |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 | 1002 |  105 | ramesh     | srikakulam |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 | 1003 |  108 | radha      | krishna    |
++--------+---------+-----+------+--------+--------+---------+------+------+------+------+------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select *from employee where salary>(select max(salary) from employee,department where deptno=dno and dno=10);
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |
++--------+---------+-----+------+--------+--------+------------+------+------+
+4 rows in set (0.04 sec)
+
+mysql> select *from employee where sssn is NULL;
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |
+| amaya  | james   | 104 |   34 | female | 270000 | Jammu      |   11 | NULL |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
++--------+---------+-----+------+--------+--------+------------+------+------+
+4 rows in set (0.03 sec)
+
+mysql> select *from employee ,department where deptno=dno and dname="production" and lname like "m%";
+Empty set (0.00 sec)
+
+mysql> select *from employee ,department where deptno=dno and dname="production" and lname like "%a%";
++-------+-------+-----+------+--------+--------+---------+------+------+------------+--------+---------+---------------+
+| fname | lname | ssn | age  | gender | salary | address | dno  | sssn | dname      | deptno | mangssn | starting_date |
++-------+-------+-----+------+--------+--------+---------+------+------+------------+--------+---------+---------------+
+| nick  | james | 103 |   25 | male   | 150000 | Kolkata |   10 |  101 | production |     10 |     102 | 2000-10-02    |
++-------+-------+-----+------+--------+--------+---------+------+------+------------+--------+---------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select fname,lname from employee where exists (select mangssn from department where mangssn=ssn) and exists(select essn from dependent where essn=ssn);
++--------+---------+
+| fname  | lname   |
++--------+---------+
+| jack   | thomson |
+| jace   | miller  |
+| wilson | jones   |
++--------+---------+
+3 rows in set (0.01 sec)
+
+mysql> select fname,lname,ssn,pid,sum(hours) as No_of_hours_spent from employee,workson,project where wdno=dnum and dnum=dno group by sssn;
++--------+---------+-----+-----+-------------------+
+| fname  | lname   | ssn | pid | No_of_hours_spent |
++--------+---------+-----+-----+-------------------+
+| andy   | thomson | 101 |   1 |               225 |
+| jack   | thomson | 102 |   1 |               248 |
+| wilson | jones   | 108 |   2 |                96 |
+| zi     | yu      | 111 |   4 |                53 |
++--------+---------+-----+-----+-------------------+
+4 rows in set (0.04 sec)
+
+mysql> select count(distinct sssn) as no_of_supervisiors from employee;
++--------------------+
+| no_of_supervisiors |
++--------------------+
+|                  4 |
++--------------------+
+1 row in set (0.04 sec)
+
+mysql> select gender,count(ssn) from employee group by gender;
++--------+------------+
+| gender | count(ssn) |
++--------+------------+
+| female |          3 |
+| male   |          8 |
++--------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select *from employee where salary>(select avg(salary) from employee);
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
++--------+---------+-----+------+--------+--------+------------+------+------+
+6 rows in set (0.04 sec)
+
+mysql> select *from emplpyee where sssn=NULL;
+ERROR 1146 (42S02): Table 'company_database.emplpyee' doesn't exist
+mysql> select *from employee where sssn=NULL;
+Empty set (0.00 sec)
+
+mysql> select *from employee where sssn is NULL;
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |
+| amaya  | james   | 104 |   34 | female | 270000 | Jammu      |   11 | NULL |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
++--------+---------+-----+------+--------+--------+------------+------+------+
+4 rows in set (0.00 sec)
+
+mysql> select upper(fname) as Fname_upper,lower(lname) as Lname_lower from employee;
++-------------+-------------+
+| Fname_upper | Lname_lower |
++-------------+-------------+
+| ANDY        | thomson     |
+| JACK        | thomson     |
+| NICK        | james       |
+| AMAYA       | james       |
+| JACE        | miller      |
+| DAVIS       | miller      |
+| WILSON      | miller      |
+| WILSON      | jones       |
+| SMITH       | johnson     |
+| SMITH       | jordan      |
+| ZI          | yu          |
++-------------+-------------+
+11 rows in set (0.04 sec)
+
+mysql> select substring(fname,1,3) from employee;
++----------------------+
+| substring(fname,1,3) |
++----------------------+
+| and                  |
+| jac                  |
+| nic                  |
+| ama                  |
+| jac                  |
+| dav                  |
+| wil                  |
+| wil                  |
+| smi                  |
+| smi                  |
+| zi                   |
++----------------------+
+11 rows in set (0.03 sec)
+
+mysql> select fname,locate('l',fname)from employee where fname="wilson";
++--------+-------------------+
+| fname  | locate('l',fname) |
++--------+-------------------+
+| wilson |                 3 |
+| wilson |                 3 |
++--------+-------------------+
+2 rows in set (0.03 sec)
+
+mysql> select *,lenght(fname) from employee where length(lname)>5;
+ERROR 1305 (42000): FUNCTION company_database.lenght does not exist
+mysql> select *,length(fname) from employee where length(lname)>5;
++--------+---------+-----+------+--------+--------+------------+------+------+---------------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn | length(fname) |
++--------+---------+-----+------+--------+--------+------------+------+------+---------------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |             4 |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 |             4 |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |             4 |
+| davis  | miller  | 106 |   32 | male   | 240000 | hyderabad  |   11 |  104 |             5 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |             6 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |             5 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |             5 |
++--------+---------+-----+------+--------+--------+------------+------+------+---------------+
+7 rows in set (0.00 sec)
+
+mysql> select concat(fname,'.',lname) as Full_Name_of_employee from employee;
++-----------------------+
+| Full_Name_of_employee |
++-----------------------+
+| andy.thomson          |
+| jack.thomson          |
+| nick.james            |
+| amaya.james           |
+| jace.miller           |
+| davis.miller          |
+| wilson.miller         |
+| wilson.jones          |
+| smith.johnson         |
+| smith.jordan          |
+| zi.yu                 |
++-----------------------+
+11 rows in set (0.00 sec)
+
+mysql> update department,employee set starting_date=date_add(starting_date,interval 25 day) where dname="production" and mangssn=ssn and fname like "%l%";
+Query OK, 0 rows affected (0.06 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select *from department;
++------------+--------+---------+---------------+
+| dname      | deptno | mangssn | starting_date |
++------------+--------+---------+---------------+
+| production |     10 |     102 | 2000-10-02    |
+| finance    |     11 |     105 | 1999-08-12    |
+| marketing  |     12 |     108 | 1999-10-23    |
+| purchasing |     13 |     111 | 2002-01-26    |
++------------+--------+---------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select *from employee;
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female | 270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   | 240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female | 250000 | chennai    |   13 |  110 |
++--------+---------+-----+------+--------+--------+------------+------+------+
+11 rows in set (0.00 sec)
+
+mysql> update department,employee set starting_date=date_add(starting_date,interval 25 day) where dname="production" and mangssn=ssn and fname like "%c%";
+Query OK, 1 row affected (0.63 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from employee;
++--------+---------+-----+------+--------+--------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address    | dno  | sssn |
++--------+---------+-----+------+--------+--------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 230000 | Mumbai     |   10 | NULL |
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 150000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female | 270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   | 240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   | 350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   | 460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   | 320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female | 250000 | chennai    |   13 |  110 |
++--------+---------+-----+------+--------+--------+------------+------+------+
+11 rows in set (0.00 sec)
+
+mysql> select *from department;
++------------+--------+---------+---------------+
+| dname      | deptno | mangssn | starting_date |
++------------+--------+---------+---------------+
+| production |     10 |     102 | 2000-10-27    |
+| finance    |     11 |     105 | 1999-08-12    |
+| marketing  |     12 |     108 | 1999-10-23    |
+| purchasing |     13 |     111 | 2002-01-26    |
++------------+--------+---------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select dname,max(salary) as max_salary,min(salary) as min_salary),avg(salary) as avg_salary,sum(salary) as sum_salary from employee,department group by dname;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),avg(salary) as avg_salary,sum(salary) as sum_salary from employee,department g' at line 1
+mysql> select dname,max(salary) as max_salary,min(salary) as min_salary,avg(salary) as avg_salary,sum(salary) as sum_salary from employee,department group by dname;
++------------+------------+------------+-------------+------------+
+| dname      | max_salary | min_salary | avg_salary  | sum_salary |
++------------+------------+------------+-------------+------------+
+| production |     460000 |     150000 | 308181.8182 |    3390000 |
+| finance    |     460000 |     150000 | 308181.8182 |    3390000 |
+| marketing  |     460000 |     150000 | 308181.8182 |    3390000 |
+| purchasing |     460000 |     150000 | 308181.8182 |    3390000 |
++------------+------------+------------+-------------+------------+
+4 rows in set (0.03 sec)
+
+mysql> select dname,count(pid) as controlling_projects from department,project where dnum=deptno group by dname;
++------------+----------------------+
+| dname      | controlling_projects |
++------------+----------------------+
+| production |                    2 |
+| marketing  |                    1 |
+| purchasing |                    1 |
++------------+----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select fname,lname,count(essn) from employee,dependent where essn=ssn group by ssn;
++--------+---------+-------------+
+| fname  | lname   | count(essn) |
++--------+---------+-------------+
+| jack   | thomson |           1 |
+| jace   | miller  |           3 |
+| wilson | jones   |           2 |
++--------+---------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employee where ssn in(select mangssn from employee,department where deptno=dno group by dname having count(ssn)>2);
++--------+---------+-----+------+--------+--------+---------+------+------+
+| fname  | lname   | ssn | age  | gender | salary | address | dno  | sssn |
++--------+---------+-----+------+--------+--------+---------+------+------+
+| jack   | thomson | 102 |   23 | male   | 330000 | Delhi   |   10 |  101 |
+| jace   | miller  | 105 |   25 | male   | 420000 | bhutan  |   11 |  104 |
+| wilson | jones   | 108 |   32 | male   | 370000 | Delhi   |   12 |  107 |
++--------+---------+-----+------+--------+--------+---------+------+------+
+3 rows in set (0.05 sec)
+
+mysql> select fname,lname,address,salary from employee order by ssn desc;
++--------+---------+------------+--------+
+| fname  | lname   | address    | salary |
++--------+---------+------------+--------+
+| zi     | yu      | chennai    | 250000 |
+| smith  | jordan  | hyderabad  | 320000 |
+| smith  | johnson | kolkata    | 460000 |
+| wilson | jones   | Delhi      | 370000 |
+| wilson | miller  | amaravathi | 350000 |
+| davis  | miller  | hyderabad  | 240000 |
+| jace   | miller  | bhutan     | 420000 |
+| amaya  | james   | Jammu      | 270000 |
+| nick   | james   | Kolkata    | 150000 |
+| jack   | thomson | Delhi      | 330000 |
+| andy   | thomson | Mumbai     | 230000 |
++--------+---------+------------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select ssn,fname,lname,address,salary from employee order by ssn desc limit 5;
++-----+--------+---------+------------+--------+
+| ssn | fname  | lname   | address    | salary |
++-----+--------+---------+------------+--------+
+| 111 | zi     | yu      | chennai    | 250000 |
+| 110 | smith  | jordan  | hyderabad  | 320000 |
+| 109 | smith  | johnson | kolkata    | 460000 |
+| 108 | wilson | jones   | Delhi      | 370000 |
+| 107 | wilson | miller  | amaravathi | 350000 |
++-----+--------+---------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> exit;
+
+

@@ -1,0 +1,40 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| amazon             |
+| bank               |
+| class              |
+| company            |
+| company1           |
+| company_database   |
+| information_schema |
+| kumari15           |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sailor_db          |
+| sys                |
+| w3                 |
++--------------------+
+14 rows in set (0.04 sec)
+
+mysql> use company_database;
+Database changed
+mysql> create procedure proc_emp() declare v_ename varchar(100)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare v_ename varchar(100)' at line 1
+mysql> create procedure proc_emp() 
+    -> begin
+    -> declare v_ename varchar(100);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> create procedure proc_emp() begin declare v_ename varchar(100) declare v_salary int declare v_finished integer default 0 declare c1 cursor for select fname,salry from employee declare continue handle for not found aet v_finished=1 opn c1 get_emp:LOOP fetch c1 into v_ename,v_salary if v_finished=1 then leave get_emp end if select v_ename as employee_fname,v_salary as employee_salary end loop get_emp close c1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare v_salary int declare v_finished integer default 0 declare c1 cursor for ' at line 1
+mysql> create procedure proc_emp() begin declare v_ename varchar(100), declare v_salary int, declare v_finished integer default 0 ,declare c1 cursor for select fname,salry from employee declare continue handle for not found aet v_finished=1 opn c1 get_emp:LOOP fetch c1 into v_ename,v_salary if v_finished=1 then leave get_emp end if select v_ename as employee_fname,v_salary as employee_salary end loop get_emp close c1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', declare v_salary int, declare v_finished integer default 0 ,declare c1 cursor ' at line 1
+mysql> create procedure proc_emp() begin declare v_ename varchar(100); declare v_salary int; declare v_finished integer default 0 ;declare c1 cursor for select fname,salry from employee declare continue handle for not found aet v_finished=1 opn c1 get_emp:LOOP fetch c1 into v_ename,v_salary if v_finished=1 then leave get_emp end if select v_ename as employee_fname,v_salary as employee_salary end loop get_emp close c1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare v_salary int' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare v_finished integer default 0' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare c1 cursor for select fname,salry from employee declare continue handle f' at line 1
+mysql> Terminal close -- exit!

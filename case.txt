@@ -1,0 +1,94 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| amazon             |
+| bank               |
+| class              |
+| company            |
+| company1           |
+| company_database   |
+| information_schema |
+| kumari15           |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sailor_db          |
+| sys                |
+| w3                 |
++--------------------+
+14 rows in set (0.03 sec)
+
+mysql> use companu_database;
+ERROR 1049 (42000): Unknown database 'companu_database'
+mysql> use company_database;
+Database changed
+mysql> select *from employee;
++--------+---------+-----+------+--------+---------+------------+------+------+
+| fname  | lname   | ssn | age  | gender | salary  | address    | dno  | sssn |
++--------+---------+-----+------+--------+---------+------------+------+------+
+| andy   | thomson | 101 |   34 | female | 3680000 | Mumbai     |   10 | NULL |
+| jack   | thomson | 102 |   23 | male   | 5280000 | Delhi      |   10 |  101 |
+| nick   | james   | 103 |   25 | male   | 2400000 | Kolkata    |   10 |  101 |
+| amaya  | james   | 104 |   34 | female |  270000 | Jammu      |   11 | NULL |
+| jace   | miller  | 105 |   25 | male   |  420000 | bhutan     |   11 |  104 |
+| davis  | miller  | 106 |   32 | male   |  240000 | hyderabad  |   11 |  104 |
+| wilson | miller  | 107 |   29 | male   |  350000 | amaravathi |   12 | NULL |
+| wilson | jones   | 108 |   32 | male   |  370000 | Delhi      |   12 |  107 |
+| smith  | johnson | 109 |   35 | male   |  460000 | kolkata    |   12 |  107 |
+| smith  | jordan  | 110 |   32 | male   |  320000 | hyderabad  |   13 | NULL |
+| zi     | yu      | 111 |   36 | female |  250000 | chennai    |   13 |  110 |
++--------+---------+-----+------+--------+---------+------------+------+------+
+11 rows in set (0.00 sec)
+
+mysql> select gender , case when gender="male" then count(ssn) when gender="female" then count(ssn) end as no_of_employees from employee group by gender;
++--------+-----------------+
+| gender | no_of_employees |
++--------+-----------------+
+| female |               3 |
+| male   |               8 |
++--------+-----------------+
+2 rows in set (0.07 sec)
+
+mysql> select ssn, case when ssn%2=0 then 'even number' else 'odd number' end as even_or_odd from employee;
++-----+-------------+
+| ssn | even_or_odd |
++-----+-------------+
+| 101 | odd number  |
+| 104 | even number |
+| 107 | odd number  |
+| 110 | even number |
+| 102 | even number |
+| 103 | odd number  |
+| 105 | odd number  |
+| 106 | even number |
+| 108 | even number |
+| 109 | odd number  |
+| 111 | odd number  |
++-----+-------------+
+11 rows in set (0.03 sec)
+
+mysql> select ssn,case when ssn>105 then 'ssn is greater than 105' when ssn<105 then 'ssn less than 105' when ssn=105 then 'ssn is 105'' end as result from employee;
+    '> select ssn,case when ssn>105 then 'ssn is greater than 105' when ssn<105 then 'ssn less than 105' when ssn=105 then 'ssn is 105' end as result from employee;
+    '> '
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ssn is greater than 105' when ssn<105 then 'ssn less than 105' when ssn=105 then' at line 2
+mysql> select ssn,case when ssn>105 then 'ssn is greater than 105' when ssn<105 then 'ssn less than 105' when ssn=105 then 'ssn is 105' end as result from employee;
++-----+-------------------------+
+| ssn | result                  |
++-----+-------------------------+
+| 101 | ssn less than 105       |
+| 104 | ssn less than 105       |
+| 107 | ssn is greater than 105 |
+| 110 | ssn is greater than 105 |
+| 102 | ssn less than 105       |
+| 103 | ssn less than 105       |
+| 105 | ssn is 105              |
+| 106 | ssn is greater than 105 |
+| 108 | ssn is greater than 105 |
+| 109 | ssn is greater than 105 |
+| 111 | ssn is greater than 105 |
++-----+-------------------------+
+11 rows in set (0.00 sec)
+
+mysql> exit;

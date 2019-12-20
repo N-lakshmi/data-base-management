@@ -1,0 +1,502 @@
+mysql> select sname form sailor s,reserve r where bid=2 and s.sid=r.sid;  
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sailor s,reserve r where bid=2 and s.sid=r.sid' at line 1
+mysql> select sname from sailor s,reserve r where bid=2 and s.sid=r.sid;  
++-------+
+| sname |
++-------+
+| ram   |
++-------+
+1 row in set (0.07 sec)
+
+mysql> select sname from sailor where age=min(age);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select sname from sailor where age=(select min(age) from sailor);
++-------+
+| sname |
++-------+
+| akash |
++-------+
+1 row in set (0.05 sec)
+
+mysql> select distinct(colour) form boat;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'boat' at line 1
+mysql> select distinct(colour) from boat;
++--------+
+| colour |
++--------+
+| red    |
+| green  |
+| blue   |
+| black  |
++--------+
+4 rows in set (0.02 sec)
+
+mysql> select colour from sailor s,reserve r,boat b where sname="ram and s.sid=r.sid and r.bid=b.bid;
+    "> "
+    -> ;
+Empty set (0.02 sec)
+
+mysql> select colour from sailor s,reserve r,boat b where sname="ram" and s.sid=r.sid and r.bid=b.bid;
++--------+
+| colour |
++--------+
+| red    |
+| green  |
++--------+
+2 rows in set (0.03 sec)
+
+mysql> select sname,sid from sailor s,reserve r where rating >3 and s.sid=r.sid and bid=3;
+ERROR 1052 (23000): Column 'sid' in field list is ambiguous
+mysql> select sname,s.sid from sailor s,reserve r where rating >3 and s.sid=r.sid and bid=3;
++--------+-----+
+| sname  | sid |
++--------+-----+
+| abhi   | 104 |
+| abhi   | 104 |
+| bachan | 108 |
++--------+-----+
+3 rows in set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s,reserve r where rating >3 and s.sid=r.sid and bid=4;
++-------+-----+
+| sname | sid |
++-------+-----+
+| sam   | 102 |
++-------+-----+
+1 row in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve rwhere count(bid)>=2 and s.sid=r.sid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'count(bid)>=2 and s.sid=r.sid' at line 1
+mysql> select sname from sailor s,reserve r where count(bid)>=2 and s.sid=r.sid;
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select sname from sailor s,reserve r where count(bid)=(select count(bid)>=2 from reserve) and s.sid=r.sid;
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select sname from sailor s,reserve r where (select count(bid)>=2 from reserve) and s.sid=r.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| ram    |
+| sam    |
+| abhi   |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| james  |
++--------+
+11 rows in set (0.02 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(bid)>2 from reserve) and s.sid=r.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| ram    |
+| sam    |
+| abhi   |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| james  |
++--------+
+11 rows in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(bid)>3 from reserve) and s.sid=r.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| ram    |
+| sam    |
+| abhi   |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| james  |
++--------+
+11 rows in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(bid)>3 from reserve) and s.sid=r.sid group by s.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| james  |
++--------+
+7 rows in set (0.03 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(bid)>3 from reserve) and s.sid=r.sid order by s.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| ram    |
+| sam    |
+| abhi   |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| james  |
++--------+
+11 rows in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(bid)>3 from reserve) and s.sid=r.sid group by s.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| james  |
++--------+
+7 rows in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(r.sid)>3 from reserve) and s.sid=r.sid group by s.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| james  |
++--------+
+7 rows in set (0.02 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(sid)>3 from reserve) and s.sid=r.sid group by s.sid;
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| bachan |
+| james  |
++--------+
+7 rows in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve r where (select count(sid)>3 from reserve) and s.sid=r.sid group by sname;
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| james  |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=3 and s.sid=r.sid and r.bid=3;
++--------+-----+
+| sname  | sid |
++--------+-----+
+| abhi   | 104 |
+| abhi   | 104 |
+| bachan | 107 |
+| bachan | 108 |
++--------+-----+
+4 rows in set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=4 and s.sid=r.sid and r.bid=3;
++--------+-----+
+| sname  | sid |
++--------+-----+
+| abhi   | 104 |
+| abhi   | 104 |
+| bachan | 108 |
++--------+-----+
+3 rows in set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=5 and s.sid=r.sid and r.bid=3;
++--------+-----+
+| sname  | sid |
++--------+-----+
+| abhi   | 104 |
+| abhi   | 104 |
+| bachan | 108 |
++--------+-----+
+3 rows in set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=5 and s.sid=r.sid and r.bid=2;
+Empty set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=5 and s.sid=r.sid and r.bid=4;
+Empty set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=5 and s.sid=r.sid and r.bid=1;
+Empty set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=5 and s.sid=r.sid and r.bid=4;
+Empty set (0.00 sec)
+
+mysql> select sname,s.sid from sailor s ,reserve r where rating>=5 and s.sid=r.sid and r.bid=5;
++--------+-----+
+| sname  | sid |
++--------+-----+
+| bachan | 108 |
++--------+-----+
+1 row in set (0.00 sec)
+
+mysql> select sname from sailor s,reserve r,boat b where s.sid=r.sid and bname like %pp%;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%pp%' at line 1
+mysql> select sname from sailor s,reserve r,boat b where s.sid=r.sid and bname like "%pp%";
++--------+
+| sname  |
++--------+
+| ram    |
+| ram    |
+| ram    |
+| ram    |
+| sam    |
+| sam    |
+| abhi   |
+| abhi   |
+| abhi   |
+| abhi   |
+| akash  |
+| akash  |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| bachan |
+| james  |
+| james  |
++--------+
+22 rows in set (0.03 sec)
+
+mysql> select distinct(sname) from sailor s,reserve r,boat b where s.sid=r.sid and bname like "%pp%";
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| james  |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct(sname) from sailor s,reserve r,boat b where s.sid=r.sid and bname like "%ta%";
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| james  |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct(sname) from sailor s,reserve r,boat b where s.sid=r.sid and bname like "%ii%";
+Empty set (0.00 sec)
+
+mysql> select distinct(sname) from sailor s,reserve r,boat b where s.sid=r.sid and bname like "%p%";
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| james  |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct(sname) from sailor s,reserve r,boat b where s.sid=r.sid and bname like "%i%";
++--------+
+| sname  |
++--------+
+| ram    |
+| sam    |
+| abhi   |
+| akash  |
+| bachan |
+| james  |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select a.sid from sailor a,sailor b where a.rating >b.rating and b.sname="ram";
++-----+
+| sid |
++-----+
+| 104 |
+| 108 |
++-----+
+2 rows in set (0.00 sec)
+
+mysql> select count(r.sid) from reserve r,boat b where r.bid=b.bid and bname="titanic";
++--------------+
+| count(r.sid) |
++--------------+
+|            6 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select sname,sid from sailor where sname like "r%" and length(sname)>2;
++-------+-----+
+| sname | sid |
++-------+-----+
+| ram   | 101 |
++-------+-----+
+1 row in set (0.03 sec)
+
+mysql> select s.sid from reserve r sailor s,boat b where r.sid=s.sid and b.bid=r.bid and bcolor="red" and bcolor<>"green";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sailor s,boat b where r.sid=s.sid and b.bid=r.bid and bcolor="red" and bcolor<>"' at line 1
+mysql> select s.sid from reserve r sailor s,boat b where r.sid=s.sid and b.bid=r.bid and bcolor="red" and color<>"green";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sailor s,boat b where r.sid=s.sid and b.bid=r.bid and bcolor="red" and color<>"g' at line 1
+mysql> select s.sid from reserve r,sailor s,boat b where r.sid=s.sid and b.bid=r.bid and bcolor="red" and color<>"green";
+ERROR 1054 (42S22): Unknown column 'bcolor' in 'where clause'
+mysql> select s.sid from reserve r,sailor s,boat b where r.sid=s.sid and b.bid=r.bid and color="red" and color<>"green";
+ERROR 1054 (42S22): Unknown column 'color' in 'where clause'
+mysql> select s.sid from reserve r,sailor s,boat b where r.sid=s.sid and b.bid=r.bid and colour="red" and colour<>"green";
++-----+
+| sid |
++-----+
+| 101 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select sname from saillor where rating=(select max(rating) from sailor) limit 3;
+ERROR 1146 (42S02): Table 'sailor_db.saillor' doesn't exist
+mysql> select sname from sailor where rating=(select max(rating) from sailor) limit 3;
++--------+
+| sname  |
++--------+
+| abhi   |
+| bachan |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select s.sid,sname from sailor s where s.age>=25 and s.sid not in(select sid from reserve r,boat b where b.bid=r.bid abd bname like "5pp%";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'abd bname like "5pp%"' at line 1
+mysql> select s.sid,sname from sailor s where s.age>=25 and s.sid not in(select sid from reserve r,boat b where b.bid=r.bid abd bname like "%pp%";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'abd bname like "%pp%"' at line 1
+mysql> select s.sid,sname from sailor s where s.age>=25 and s.sid not in(select sid from reserve r,boat b where b.bid=r.bid and bname like "%pp%";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select s.sid,sname from sailor s where s.age>=25 and s.sid not in(select sid from reserve r,boat b where b.bid=r.bid and bname like "%pp%");
++-----+----------+
+| sid | sname    |
++-----+----------+
+| 101 | ram      |
+| 104 | abhi     |
+| 106 | abhishek |
+| 107 | bachan   |
+| 109 | akhil    |
++-----+----------+
+5 rows in set (0.07 sec)
+
+mysql> select sid from sailor where rating>(select max(rating) from sailor s,reserve r where r.bid=12 and s.sid=r.sid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select sid from sailor where rating>(select max(rating) from sailor s,reserve r where r.bid=12 and s.sid=r.sid);
+Empty set (0.02 sec)
+
+mysql> select sid from sailor where rating>(select max(rating) from sailor s,reserve r where r.bid=2 and s.sid=r.sid);
++-----+
+| sid |
++-----+
+| 104 |
+| 108 |
++-----+
+2 rows in set (0.00 sec)
+
+mysql> select rating,avg(age) from sailor group by rating;
++--------+----------+
+| rating | avg(age) |
++--------+----------+
+|      4 |  32.0000 |
+|      2 |  30.0000 |
+|      5 |  29.5000 |
+|      3 |  26.6667 |
+|      1 |  35.0000 |
++--------+----------+
+5 rows in set (0.05 sec)
+
+mysql> exit;
+mysql> select s.sid from reserve r,sailor s,boat b where r.sid=s.sid and b.bid=r.bid and colour="red" and colour<>"green";
++-----+
+| sid |
++-----+
+| 101 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> select rating,avg(age) from sailor group by rating having count(rating)>=2;
++--------+----------+
+| rating | avg(age) |
++--------+----------+
+|      4 |  32.0000 |
+|      2 |  30.0000 |
+|      5 |  29.5000 |
+|      3 |  26.6667 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select sname,sid from sailor where sname like "r%"  and sname like "%m" and length(sname)>2;
++-------+-----+
+| sname | sid |
++-------+-----+
+| ram   | 101 |
++-------+-----+
+1 row in set (0.00 sec)
+
+mysql> select sname from sailor where rating=(select max(rating) from sailor) limit 5;
++--------+
+| sname  |
++--------+
+| abhi   |
+| bachan |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select min(age) from sailor where age>=18 group by rating having count
+    -> 
+    -> select min(age) from sailor where age>=18 group by rating having count(rating)>=2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select min(age) from sailor where age>=18 group by rating having count(rating)>=' at line 3
+mysql> select min(age) from sailor where age>=18 group by rating having count(rating)>=2;
++----------+
+| min(age) |
++----------+
+|       23 |
+|       25 |
+|       20 |
++----------+
+3 rows in set (0.00 sec)
+
+mysql> select sid from sailor where rating>(select max(rating) from sailor s,reserve r where s.sid=r.sid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> Terminal close -- exit!

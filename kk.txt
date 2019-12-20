@@ -1,0 +1,86 @@
+mysql> create view employee_pro as select e.Lname, e.Fname, count(w.SSN) as no_of_projects, sum(Hours) as no_of_hours from employee e, work w where e.SSN=w.SSN group by e.SSN;
+ERROR 1050 (42S01): Table 'employee_pro' already exists
+mysql> create view employee_proj as select e.Lname, e.Fname, count(w.SSN) as no_of_projects, sum(Hours) as no_of_hours from employee e, work w where e.SSN=w.SSN group by e.SSN;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select * from employee_pro1;
+ERROR 1146 (42S02): Table 'company1.employee_pro1' doesn't exist
+mysql> select * from employee_proj;
++---------+-------+----------------+-------------+
+| Lname   | Fname | no_of_projects | no_of_hours |
++---------+-------+----------------+-------------+
+| Thomson | Andy  |              2 |          16 |
+| James   | Nick  |              2 |          16 |
+| Miller  | Davis |              1 |           5 |
+| Thomson | Jack  |              1 |           6 |
++---------+-------+----------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> create view emp_cmp as select Dname, count(PId) as controlling_projects from department, project where dept_num=DNo;
+ERROR 1054 (42S22): Unknown column 'dept_num' in 'where clause'
+mysql> create view emp_cmp as select Dname, count(PId) as controlling_projects from department, project where dept_no=DNo;
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> select * from emp_cmp;
++-----------+----------------------+
+| Dname     | controlling_projects |
++-----------+----------------------+
+| prodction |                    5 |
++-----------+----------------------+
+1 row in set (0.03 sec)
+
+mysql> create view emp_cmp1 as select Dname, count(PId) as controlling_projects ,count(SSN) as no_of employees from employee,  department, project where dept_no=DNo group by Dname;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employees from employee,  department, project where dept_no=DNo group by Dname' at line 1
+mysql> create view emp_cmp1 as select Dname, count(PId) as controlling_projects ,count(SSN) as no_of_employees from employee,  department, project where dept_no=DNo group by Dname;
+ERROR 1052 (23000): Column 'DNo' in where clause is ambiguous
+mysql> create view emp_cmp1 as select Dname, count(PId) as controlling_projects ,count(SSN) as no_of_employees from employee e,  department d, project p where dept_no=p.DNo group by Dname;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select * from emp_cmp1;
++------------+----------------------+-----------------+
+| Dname      | controlling_projects | no_of_employees |
++------------+----------------------+-----------------+
+| prodction  |                   20 |              20 |
+| purchasing |                   10 |              10 |
+| marketing  |                   10 |              10 |
+| Finance    |                   10 |              10 |
++------------+----------------------+-----------------+
+4 rows in set (0.01 sec)
+
+mysql> create view emp_cmp2 as select Dname, count(PId) as controlling_projects ,count(e.SSN) as no_of_employees from employee e,  department d, project p where dept_no=p.DNo group by Dname;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select * from emp_cmp2;
++------------+----------------------+-----------------+
+| Dname      | controlling_projects | no_of_employees |
++------------+----------------------+-----------------+
+| prodction  |                   20 |              20 |
+| purchasing |                   10 |              10 |
+| marketing  |                   10 |              10 |
+| Finance    |                   10 |              10 |
++------------+----------------------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> create view emp_cmp2 as select Dname, count(PId) as controlling_projects ,count(e.SSN) as no_of_employees from employee e,  department d, project p where dept_no=p.DNo and e.DNo=d.DNo group by Dname;
+ERROR 1054 (42S22): Unknown column 'd.DNo' in 'where clause'
+mysql> create view emp_cmp2 as select Dname, count(PId) as controlling_projects ,count(e.SSN) as no_of_employees from employee e,  department d, project p where dept_no=p.DNo and e.DNo=dept_no group by Dname;
+ERROR 1050 (42S01): Table 'emp_cmp2' already exists
+mysql> create view emp_cmp3 as select Dname, count(PId) as controlling_projects ,count(e.SSN) as no_of_employees from employee e,  department d, project p where dept_no=p.DNo and e.DNo=dept_no group by Dname;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select  * from emp_cmp3;
++------------+----------------------+-----------------+
+| Dname      | controlling_projects | no_of_employees |
++------------+----------------------+-----------------+
+| prodction  |                    2 |               2 |
+| purchasing |                    3 |               3 |
+| marketing  |                    3 |               3 |
+| Finance    |                    3 |               3 |
++------------+----------------------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> create dn as select Dname, dept_no from department where (select max(count(PId)) from project);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dn as select Dname, dept_no from department where (select max(count(PId)) from p' at line 1
+mysql> create dn as select Dname, dept_no from department, project where dept_no=DNo group by dept_no (select max(count(PId)) from project group by DNo);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dn as select Dname, dept_no from department, project where dept_no=DNo group by ' at line 1
+mysql> Terminal close -- exit!

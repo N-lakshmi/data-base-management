@@ -1,0 +1,29 @@
+mysql> use company_database;
+Database changed
+mysql> create function square_num(number int) returns int return number * number;
+ERROR 1418 (HY000): This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)
+mysql> create function square_num(number int) returns int  deterministic return number * number;
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> select square_num(8);
++---------------+
+| square_num(8) |
++---------------+
+|            64 |
++---------------+
+1 row in set (0.05 sec)
+
+mysql> create function area_circle (radius float) returns float deterministic return pi()*radius*radius;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select area_circle(10);
++-------------------+
+| area_circle(10)   |
++-------------------+
+| 314.1592712402344 |
++-------------------+
+1 row in set (0.03 sec)
+
+mysql> case;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'case' at line 1
+mysql> exit;

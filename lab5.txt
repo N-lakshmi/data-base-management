@@ -1,0 +1,222 @@
+mysql> create database class;
+Query OK, 1 row affected (0.89 sec)
+
+mysql> use class;
+Database changed
+mysql> create table students(sid int,sname char(20),sage int,cid int);
+Query OK, 0 rows affected (2.04 sec)
+
+mysql> create table course(cid int,cname char(10),cfee int);
+Query OK, 0 rows affected (0.75 sec)
+
+mysql> desc students;
++-------+----------+------+-----+---------+-------+
+| Field | Type     | Null | Key | Default | Extra |
++-------+----------+------+-----+---------+-------+
+| sid   | int(11)  | YES  |     | NULL    |       |
+| sname | char(20) | YES  |     | NULL    |       |
+| sage  | int(11)  | YES  |     | NULL    |       |
+| cid   | int(11)  | YES  |     | NULL    |       |
++-------+----------+------+-----+---------+-------+
+4 rows in set (0.21 sec)
+
+mysql> insert into students values(836,"Supriya",19,2345);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into students values(806,"Kumari",19,3445);
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into students values(806,"Kumari",19,3445);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into students values(101,"X",18,10);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into students values(102,"y",19,20);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into students values(103,"z",20,30);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into course values(10,"os",20000);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into course values(20,"dbms",30000);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into course values(40,"oops",40000);
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into course values(50,"daa",40000);
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select *from students;
++------+---------+------+------+
+| sid  | sname   | sage | cid  |
++------+---------+------+------+
+|  836 | Supriya |   19 | 2345 |
+|  806 | Kumari  |   19 | 3445 |
+|  806 | Kumari  |   19 | 3445 |
+|  101 | X       |   18 |   10 |
+|  102 | y       |   19 |   20 |
+|  103 | z       |   20 |   30 |
++------+---------+------+------+
+6 rows in set (0.00 sec)
+
+mysql> delete from students where sid=806;
+Query OK, 2 rows affected (0.20 sec)
+
+mysql> delete from students where sid=836;
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select *from students;
++------+-------+------+------+
+| sid  | sname | sage | cid  |
++------+-------+------+------+
+|  101 | X     |   18 |   10 |
+|  102 | y     |   19 |   20 |
+|  103 | z     |   20 |   30 |
++------+-------+------+------+
+3 rows in set (0.00 sec)
+
+mysql> select *from course;
++------+-------+-------+
+| cid  | cname | cfee  |
++------+-------+-------+
+|   10 | os    | 20000 |
+|   20 | dbms  | 30000 |
+|   40 | oops  | 40000 |
+|   50 | daa   | 40000 |
++------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select *from students inner join course on students.cid=course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
++------+-------+------+------+------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select *from students left outer join course on students.cid=course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
+|  103 | z     |   20 |   30 | NULL | NULL  |  NULL |
++------+-------+------+------+------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from students right outer join course on students.cid=course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
+| NULL | NULL  | NULL | NULL |   40 | oops  | 40000 |
+| NULL | NULL  | NULL | NULL |   50 | daa   | 40000 |
++------+-------+------+------+------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select *from students full outer join course on students.cid=course.cid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join course on students.cid=course.cid' at line 1
+mysql> select *from students inner join course on students.cid>course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  102 | y     |   19 |   20 |   10 | os    | 20000 |
+|  103 | z     |   20 |   30 |   10 | os    | 20000 |
+|  103 | z     |   20 |   30 |   20 | dbms  | 30000 |
++------+-------+------+------+------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from students cross join course;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   10 | os    | 20000 |
+|  103 | z     |   20 |   30 |   10 | os    | 20000 |
+|  101 | X     |   18 |   10 |   20 | dbms  | 30000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
+|  103 | z     |   20 |   30 |   20 | dbms  | 30000 |
+|  101 | X     |   18 |   10 |   40 | oops  | 40000 |
+|  102 | y     |   19 |   20 |   40 | oops  | 40000 |
+|  103 | z     |   20 |   30 |   40 | oops  | 40000 |
+|  101 | X     |   18 |   10 |   50 | daa   | 40000 |
+|  102 | y     |   19 |   20 |   50 | daa   | 40000 |
+|  103 | z     |   20 |   30 |   50 | daa   | 40000 |
++------+-------+------+------+------+-------+-------+
+12 rows in set (0.00 sec)
+
+mysql> select *from students full outer join course on students.cid=course.cid and cfee<30000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join course on students.cid=course.cid and cfee<30000' at line 1
+mysql> select *from students natural join course;
++------+------+-------+------+-------+-------+
+| cid  | sid  | sname | sage | cname | cfee  |
++------+------+-------+------+-------+-------+
+|   10 |  101 | X     |   18 | os    | 20000 |
+|   20 |  102 | y     |   19 | dbms  | 30000 |
++------+------+-------+------+-------+-------+
+2 rows in set (0.02 sec)
+
+mysql> select *from students full outer join course on students.cid=course.cid and course.cfee<30000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join course on students.cid=course.cid and course.cfee<30000' at line 1
+mysql> select *from students,course where students.cid=course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
++------+-------+------+------+------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select *from students,course where students.cid>course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  102 | y     |   19 |   20 |   10 | os    | 20000 |
+|  103 | z     |   20 |   30 |   10 | os    | 20000 |
+|  103 | z     |   20 |   30 |   20 | dbms  | 30000 |
++------+-------+------+------+------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from students,course where students.cid<course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   20 | dbms  | 30000 |
+|  101 | X     |   18 |   10 |   40 | oops  | 40000 |
+|  102 | y     |   19 |   20 |   40 | oops  | 40000 |
+|  103 | z     |   20 |   30 |   40 | oops  | 40000 |
+|  101 | X     |   18 |   10 |   50 | daa   | 40000 |
+|  102 | y     |   19 |   20 |   50 | daa   | 40000 |
+|  103 | z     |   20 |   30 |   50 | daa   | 40000 |
++------+-------+------+------+------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql> select *from students left outer join course on students.cid=course.cid union all select *from students right outer join course on students.cid=course.cid;
++------+-------+------+------+------+-------+-------+
+| sid  | sname | sage | cid  | cid  | cname | cfee  |
++------+-------+------+------+------+-------+-------+
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
+|  103 | z     |   20 |   30 | NULL | NULL  |  NULL |
+|  101 | X     |   18 |   10 |   10 | os    | 20000 |
+|  102 | y     |   19 |   20 |   20 | dbms  | 30000 |
+| NULL | NULL  | NULL | NULL |   40 | oops  | 40000 |
+| NULL | NULL  | NULL | NULL |   50 | daa   | 40000 |
++------+-------+------+------+------+-------+-------+
+7 rows in set (0.02 sec)
+
+mysql> select *from course c1,course c2 where c1.cfee=c2.cfee and c1.cname="os";
++------+-------+-------+------+-------+-------+
+| cid  | cname | cfee  | cid  | cname | cfee  |
++------+-------+-------+------+-------+-------+
+|   10 | os    | 20000 |   10 | os    | 20000 |
++------+-------+-------+------+-------+-------+
+1 row in set (0.00 sec)
+
+mysql> exit;

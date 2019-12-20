@@ -1,0 +1,276 @@
+mysql> show databases;
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.80 sec)
+
+mysql> create database RGUKT;
+Query OK, 1 row affected (0.33 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use rgukt;
+Database changed
+mysql> create table student (sid varchar(10), name char(20) , age int, branch char(20));
+Query OK, 0 rows affected (1.32 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | varchar(10) | YES  |     | NULL    |       |
+| name   | char(20)    | YES  |     | NULL    |       |
+| age    | int(11)     | YES  |     | NULL    |       |
+| branch | char(20)    | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.05 sec)
+mysql> insert into student values('s160806','kumari',18,'cse');
+Query OK, 1 row affected (0.31 sec)
+
+mysql> insert into student values('s160836','supriya',19,'cse');
+Query OK, 1 row affected (0.15 sec)
+
+mysql> insert into student values('s160421','radha',19,'cse');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into student values('s160084','prasanna',19,'ece');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into student values('s160249','monika',19,'ece');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | varchar(10) | YES  |     | NULL    |       |
+| name   | char(20)    | YES  |     | NULL    |       |
+| age    | int(11)     | YES  |     | NULL    |       |
+| branch | char(20)    | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_rgukt |
++-----------------+
+| student         |
++-----------------+
+1 row in set (0.11 sec)
+
+mysql> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | varchar(10) | YES  |     | NULL    |       |
+| name   | char(20)    | YES  |     | NULL    |       |
+| age    | int(11)     | YES  |     | NULL    |       |
+| branch | char(20)    | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from student;
++---------+----------+------+--------+
+| sid     | name     | age  | branch |
++---------+----------+------+--------+
+| s160806 | kumari   |   18 | cse    |
+| s160836 | supriya  |   19 | cse    |
+| s160421 | radha    |   19 | cse    |
+| s160084 | prasanna |   19 | ece    |
+| s160249 | monika   |   19 | ece    |
++---------+----------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> delete from student where id='s160806';
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> delete from student where sid='s160806';
+Query OK, 1 row affected (0.14 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_rgukt |
++-----------------+
+| student         |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from student;
++---------+----------+------+--------+
+| sid     | name     | age  | branch |
++---------+----------+------+--------+
+| s160836 | supriya  |   19 | cse    |
+| s160421 | radha    |   19 | cse    |
+| s160084 | prasanna |   19 | ece    |
+| s160249 | monika   |   19 | ece    |
++---------+----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> update student set name='andy' where sid='s160249';
+Query OK, 1 row affected (0.14 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+
+| sid     | name     | age  | branch |
++---------+----------+------+--------+
+| s160836 | supriya  |   19 | cse    |
+| s160421 | radha    |   19 | cse    |
+| s160084 | prasanna |   19 | ece    |
+| s160249 | andy     |   19 | ece    |
++---------+----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> alter table student add address varchar(50);
+Query OK, 0 rows affected (0.74 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+---------+
+| sid     | name     | age  | branch | address |
++---------+----------+------+--------+---------+
+| s160836 | supriya  |   19 | cse    | NULL    |
+| s160421 | radha    |   19 | cse    | NULL    |
+| s160084 | prasanna |   19 | ece    | NULL    |
+| s160249 | andy     |   19 | ece    | NULL    |
++---------+----------+------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> update student set branch='civil' where branch='ece';
+Query OK, 2 rows affected (0.14 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+---------+
+| sid     | name     | age  | branch | address |
++---------+----------+------+--------+---------+
+| s160836 | supriya  |   19 | cse    | NULL    |
+| s160421 | radha    |   19 | cse    | NULL    |
+| s160084 | prasanna |   19 | civil  | NULL    |
+| s160249 | andy     |   19 | civil  | NULL    |
++---------+----------+------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> update student set address='amp' where sid='s160836';
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+---------+
+| sid     | name     | age  | branch | address |
++---------+----------+------+--------+---------+
+| s160836 | supriya  |   19 | cse    | amp     |
+| s160421 | radha    |   19 | cse    | NULL    |
+| s160084 | prasanna |   19 | civil  | NULL    |
+| s160249 | andy     |   19 | civil  | NULL    |
++---------+----------+------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> update student set address='krishna' where sid='s160084';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set address='vizag' where sid='s160421';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set address='ongole' where sid='s160249';
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+---------+
+| sid     | name     | age  | branch | address |
++---------+----------+------+--------+---------+
+| s160836 | supriya  |   19 | cse    | amp     |
+| s160421 | radha    |   19 | cse    | vizag   |
+| s160084 | prasanna |   19 | civil  | krishna |
+| s160249 | andy     |   19 | civil  | ongole  |
++---------+----------+------+--------+---------+
+4 rows in set (0.00 sec)
+ 
+mysql> alter table student drop column address;
+Query OK, 0 rows affected (1.97 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+
+| sid     | name     | age  | branch |
++---------+----------+------+--------+
+| s160836 | supriya  |   19 | cse    |
+| s160421 | radha    |   19 | cse    |
+| s160084 | prasanna |   19 | civil  |
+| s160249 | andy     |   19 | civil  |
++---------+----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | varchar(10) | YES  |     | NULL    |       |
+| name   | char(20)    | YES  |     | NULL    |       |
+| age    | int(11)     | YES  |     | NULL    |       |
+| branch | char(20)    | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.04 sec)
+
+mysql> alter table student add address varchar(50);
+Query OK, 0 rows affected (0.64 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table student modify address char;
+Query OK, 4 rows affected (2.08 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++---------+----------+------+--------+---------+
+| sid     | name     | age  | branch | address |
++---------+----------+------+--------+---------+
+| s160836 | supriya  |   19 | cse    | NULL    |
+| s160421 | radha    |   19 | cse    | NULL    |
+| s160084 | prasanna |   19 | civil  | NULL    |
+| s160249 | andy     |   19 | civil  | NULL    |
++---------+----------+------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| sid     | varchar(10) | YES  |     | NULL    |       |
+| name    | char(20)    | YES  |     | NULL    |       |
+| age     | int(11)     | YES  |     | NULL    |       |
+| branch  | char(20)    | YES  |     | NULL    |       |
+| address | char(1)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> Terminal close -- exit!

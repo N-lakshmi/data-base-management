@@ -1,0 +1,539 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| amazon             |
+| bank               |
+| class              |
+| company            |
+| company1           |
+| information_schema |
+| mysql              |
+| performance_schema |
+| rgukt              |
+| sailor_db          |
+| sys                |
+| w3                 |
++--------------------+
+12 rows in set (0.04 sec)
+
+mysql> use amazon;
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_amazon |
++------------------+
+| amazon           |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> use company1;
+Database changed
+mysql> show tables;
++--------------------+
+| Tables_in_company1 |
++--------------------+
+| department         |
+| dependent          |
+| employee           |
+| project            |
+| work               |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> select *from department;
++------------+------+------+---------------+
+| DName      | DNo  | SSN  | Starting_Date |
++------------+------+------+---------------+
+| prodction  | 1001 |  101 |          2000 |
+| purchasing | 1002 |  102 |          1999 |
+| marketing  | 1003 |  104 |          2000 |
+| Finance    | 1004 |  103 |          2002 |
++------------+------+------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select *from employee;
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack   | Thomson  | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Jace   | Miller   | 105 |   34 | Male   | 270000 | India     | 1004 |  107 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 |  109 |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 |  108 |
+| Wilson | Jones    | 108 |   34 | Male   | 290000 | China     | 1004 |  106 |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 |  109 |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> select *from project;
++---------+-----+-----------+------+
+| PName   | PId | PLocation | DNo  |
++---------+-----+-----------+------+
+| panther |   1 | Mumbai    | 1002 |
+| Eagle   |   2 | New York  | 1003 |
+| Green   |   3 | Beijing   | 1001 |
+| Lion    |   4 | Delhi     | 1004 |
+| Falcon  |   5 | Colombo   | 1001 |
++---------+-----+-----------+------+
+5 rows in set (0.11 sec)
+
+mysql> select *from work;
++------+------+-------+------+
+| DNo  | SSN  | Hours | PId  |
++------+------+-------+------+
+| 1001 |  101 |     7 |    1 |
+| 1001 |  103 |     9 |    3 |
+| 1004 |  101 |     9 |    3 |
+| 1002 |  106 |     5 |    4 |
+| 1001 |  103 |     7 |    4 |
+| 1003 |  102 |     6 |    1 |
++------+------+-------+------+
+6 rows in set (0.06 sec)
+
+mysql> select *from dependent;
++---------+------+-----------+--------------+
+| DepenId | SSN  | DepenName | DepenAddress |
++---------+------+-----------+--------------+
+|     201 |  101 | Wang      | China        |
+|     202 |  104 | Lin       | America      |
+|     203 |  101 | Dong      | Colombo      |
+|     204 |  101 | Si Ma     | China        |
+|     204 |  104 | Dong      | China        |
++---------+------+-----------+--------------+
+5 rows in set (0.06 sec)
+
+mysql> 
+mysql> select *from employee where FName="Andy" and LName="Thomson";
++-------+---------+-----+------+--------+--------+---------+------+------+
+| FName | LName   | SSN | Age  | Gender | Salary | Address | DNo  | SSSN |
++-------+---------+-----+------+--------+--------+---------+------+------+
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America | 1001 |  106 |
++-------+---------+-----+------+--------+--------+---------+------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee e,department d where e.SSSN=d.DNo;
+Empty set (0.03 sec)
+
+mysql> select * from employee e,department d where e.SSN=d.DNo;
+Empty set (0.00 sec)
+
+mysql> select * from employee e,department d where e.SSN=d.SSN;
++-------+---------+-----+------+--------+--------+-----------+------+------+------------+------+------+---------------+
+| FName | LName   | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN | DName      | DNo  | SSN  | Starting_Date |
++-------+---------+-----+------+--------+--------+-----------+------+------+------------+------+------+---------------+
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America   | 1001 |  106 | prodction  | 1001 |  101 |          2000 |
+| Jack  | Thomson | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 | purchasing | 1002 |  102 |          1999 |
+| Amaya | James   | 104 |   36 | Female | 290000 | Australia | 1003 |  109 | marketing  | 1003 |  104 |          2000 |
+| Nick  | James   | 103 |   35 | Female | 270000 | China     | 1002 |  107 | Finance    | 1004 |  103 |          2002 |
++-------+---------+-----+------+--------+--------+-----------+------+------+------------+------+------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employee e,department d where d.DName="Finance" and e.SSN=d.SSN;
++-------+-------+-----+------+--------+--------+---------+------+------+---------+------+------+---------------+
+| FName | LName | SSN | Age  | Gender | Salary | Address | DNo  | SSSN | DName   | DNo  | SSN  | Starting_Date |
++-------+-------+-----+------+--------+--------+---------+------+------+---------+------+------+---------------+
+| Nick  | James | 103 |   35 | Female | 270000 | China   | 1002 |  107 | Finance | 1004 |  103 |          2002 |
++-------+-------+-----+------+--------+--------+---------+------+------+---------+------+------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee e,department d where d.DName="Finance" and e.DNo=d.DNo;;
++--------+---------+-----+------+--------+--------+---------+------+------+---------+------+------+---------------+
+| FName  | LName   | SSN | Age  | Gender | Salary | Address | DNo  | SSSN | DName   | DNo  | SSN  | Starting_Date |
++--------+---------+-----+------+--------+--------+---------+------+------+---------+------+------+---------------+
+| Jack   | Thomson | 102 |   36 | Male   | 220000 | Japan   | 1004 |  108 | Finance | 1004 |  103 |          2002 |
+| Jace   | Miller  | 105 |   34 | Male   | 270000 | India   | 1004 |  107 | Finance | 1004 |  103 |          2002 |
+| Wilson | Jones   | 108 |   34 | Male   | 290000 | China   | 1004 |  106 | Finance | 1004 |  103 |          2002 |
++--------+---------+-----+------+--------+--------+---------+------+------+---------+------+------+---------------+
+3 rows in set (0.28 sec)
+
+ERROR: 
+No query specified
+
+mysql> desc department;
++---------------+----------+------+-----+---------+-------+
+| Field         | Type     | Null | Key | Default | Extra |
++---------------+----------+------+-----+---------+-------+
+| DName         | char(30) | YES  |     | NULL    |       |
+| DNo           | int(11)  | NO   | PRI | NULL    |       |
+| SSN           | int(11)  | YES  | MUL | NULL    |       |
+| Starting_Date | int(11)  | YES  |     | NULL    |       |
++---------------+----------+------+-----+---------+-------+
+4 rows in set (0.12 sec)
+
+mysql> select *from project;
++---------+-----+-----------+------+
+| PName   | PId | PLocation | DNo  |
++---------+-----+-----------+------+
+| panther |   1 | Mumbai    | 1002 |
+| Eagle   |   2 | New York  | 1003 |
+| Green   |   3 | Beijing   | 1001 |
+| Lion    |   4 | Delhi     | 1004 |
+| Falcon  |   5 | Colombo   | 1001 |
++---------+-----+-----------+------+
+5 rows in set (0.00 sec)
+
+mysql> select p.PId,d.DName,e.FName as Manager,e.Address as manager_address from project p,department d,employee e where p.DNo=d.DNo and d.SSN=e.SSN;
++-----+------------+---------+-----------------+
+| PId | DName      | Manager | manager_address |
++-----+------------+---------+-----------------+
+|   3 | prodction  | Andy    | America         |
+|   5 | prodction  | Andy    | America         |
+|   1 | purchasing | Jack    | Japan           |
+|   2 | marketing  | Amaya   | Australia       |
+|   4 | Finance    | Nick    | China           |
++-----+------------+---------+-----------------+
+5 rows in set (0.03 sec)
+
+mysql> select p.PId,d.DName,e.FName as Manager,e.Address as manager_address from project p,department d,employee e where p.DNo=d.DNo and d.SSN=e.SSN and p.PLocation="Delhi";
++-----+---------+---------+-----------------+
+| PId | DName   | Manager | manager_address |
++-----+---------+---------+-----------------+
+|   4 | Finance | Nick    | China           |
++-----+---------+---------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> select a.FName as employee_Name,a.LName as employee_LName,a.SSN as employee_ID,b.FName as supervisor_FName,b.LName as supervisor_LName,b.SSSN as supervisor_ID from employee a,employee b where a.SSSN=B.SSN;
++---------------+----------------+-------------+------------------+------------------+---------------+
+| employee_Name | employee_LName | employee_ID | supervisor_FName | supervisor_LName | supervisor_ID |
++---------------+----------------+-------------+------------------+------------------+---------------+
+| Andy          | Thomson        |         101 | Davis            | Miller           |           109 |
+| Jack          | Thomson        |         102 | Wilson           | Jones            |           106 |
+| Nick          | James          |         103 | Wilson           | Williams         |           108 |
+| Amaya         | James          |         104 | Smith            | Johnson          |           109 |
+| Jace          | Miller         |         105 | Wilson           | Williams         |           108 |
+| Davis         | Miller         |         106 | Smith            | Johnson          |           109 |
+| Wilson        | Williams       |         107 | Wilson           | Jones            |           106 |
+| Wilson        | Jones          |         108 | Davis            | Miller           |           109 |
+| Smith         | Johnson        |         109 | Smith            | Johnson          |           109 |
+| Smith         | Jordon         |         110 | Wilson           | Jones            |           106 |
++---------------+----------------+-------------+------------------+------------------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> select *from employee;
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack   | Thomson  | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Jace   | Miller   | 105 |   34 | Male   | 270000 | India     | 1004 |  107 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 |  109 |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 |  108 |
+| Wilson | Jones    | 108 |   34 | Male   | 290000 | China     | 1004 |  106 |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 |  109 |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> update table employee set SSSN=NULL where SSN=106;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table employee set SSSN=NULL where SSN=106' at line 1
+mysql> update employee set SSSN=NULL where SSN=106;
+Query OK, 1 row affected (0.40 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee set SSSN=NULL where SSN=108 and SSN=107 and SSN=109;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select *from employee;
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack   | Thomson  | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Jace   | Miller   | 105 |   34 | Male   | 270000 | India     | 1004 |  107 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 |  108 |
+| Wilson | Jones    | 108 |   34 | Male   | 290000 | China     | 1004 |  106 |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 |  109 |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> update employee set SSSN=NULL where SSN=108 or SSN=107 or SSN=109;
+Query OK, 3 rows affected (0.14 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select *from employee;
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack   | Thomson  | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Jace   | Miller   | 105 |   34 | Male   | 270000 | India     | 1004 |  107 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 | NULL |
+| Wilson | Jones    | 108 |   34 | Male   | 290000 | China     | 1004 | NULL |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 | NULL |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> select a.FName as employee_Name,a.LName as employee_LName,a.SSN as employee_ID,b.FName as supervisor_FName,b.LName as supervisor_LName,b.SSSN as supervisor_ID from employee a,employee b where a.SSSN=B.SSN;
++---------------+----------------+-------------+------------------+------------------+---------------+
+| employee_Name | employee_LName | employee_ID | supervisor_FName | supervisor_LName | supervisor_ID |
++---------------+----------------+-------------+------------------+------------------+---------------+
+| Andy          | Thomson        |         101 | Davis            | Miller           |          NULL |
+| Jack          | Thomson        |         102 | Wilson           | Jones            |          NULL |
+| Nick          | James          |         103 | Wilson           | Williams         |          NULL |
+| Amaya         | James          |         104 | Smith            | Johnson          |          NULL |
+| Jace          | Miller         |         105 | Wilson           | Williams         |          NULL |
+| Smith         | Jordon         |         110 | Wilson           | Jones            |          NULL |
++---------------+----------------+-------------+------------------+------------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select a.FName as employee_Name,a.LName as employee_LName,a.SSN as employee_ID,b.FName as supervisor_FName,b.LName as supervisor_LName,b.SSSN as supervisor_ID from employee a,employee b where a.SSSN=b.SSN;
++---------------+----------------+-------------+------------------+------------------+---------------+
+| employee_Name | employee_LName | employee_ID | supervisor_FName | supervisor_LName | supervisor_ID |
++---------------+----------------+-------------+------------------+------------------+---------------+
+| Andy          | Thomson        |         101 | Davis            | Miller           |          NULL |
+| Jack          | Thomson        |         102 | Wilson           | Jones            |          NULL |
+| Nick          | James          |         103 | Wilson           | Williams         |          NULL |
+| Amaya         | James          |         104 | Smith            | Johnson          |          NULL |
+| Jace          | Miller         |         105 | Wilson           | Williams         |          NULL |
+| Smith         | Jordon         |         110 | Wilson           | Jones            |          NULL |
++---------------+----------------+-------------+------------------+------------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select a.FName as employee_Name,a.LName as employee_LName,a.SSN as employee_ID,b.FName as supervisor_FName,b.LName as supervisor_LName,b.SSN as supervisor_ID from employee a,employee b where a.SSSN=b.SSN;
++---------------+----------------+-------------+------------------+------------------+---------------+
+| employee_Name | employee_LName | employee_ID | supervisor_FName | supervisor_LName | supervisor_ID |
++---------------+----------------+-------------+------------------+------------------+---------------+
+| Andy          | Thomson        |         101 | Davis            | Miller           |           106 |
+| Jack          | Thomson        |         102 | Wilson           | Jones            |           108 |
+| Nick          | James          |         103 | Wilson           | Williams         |           107 |
+| Amaya         | James          |         104 | Smith            | Johnson          |           109 |
+| Jace          | Miller         |         105 | Wilson           | Williams         |           107 |
+| Smith         | Jordon         |         110 | Wilson           | Jones            |           108 |
++---------------+----------------+-------------+------------------+------------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct Salary from employee;
++--------+
+| Salary |
++--------+
+| 230000 |
+| 220000 |
+| 270000 |
+| 290000 |
+| 300000 |
+| 200000 |
+| 280000 |
++--------+
+7 rows in set (0.03 sec)
+
+mysql> select a.FName as supervisor_FName,a.LName as supervisor_LName,b.FName as Emp_FName,b.LName as Emp_LName from employee a,employee b where a.SSN=b.SSSN;
++------------------+------------------+-----------+-----------+
+| supervisor_FName | supervisor_LName | Emp_FName | Emp_LName |
++------------------+------------------+-----------+-----------+
+| Davis            | Miller           | Andy      | Thomson   |
+| Wilson           | Jones            | Jack      | Thomson   |
+| Wilson           | Williams         | Nick      | James     |
+| Smith            | Johnson          | Amaya     | James     |
+| Wilson           | Williams         | Jace      | Miller    |
+| Wilson           | Jones            | Smith     | Jordon    |
++------------------+------------------+-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select a.* from employee a,employee b where a.Salary<>b.Salary group by Salary;
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Jack   | Thomson  | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 | NULL |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 | NULL |
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+7 rows in set (0.03 sec)
+
+mysql> select *from employee where exists(select distinct Salary from employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select *from employee where exists(select distinct Salary from employee);
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack   | Thomson  | 102 |   36 | Male   | 220000 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Jace   | Miller   | 105 |   34 | Male   | 270000 | India     | 1004 |  107 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 | NULL |
+| Wilson | Jones    | 108 |   34 | Male   | 290000 | China     | 1004 | NULL |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 | NULL |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+10 rows in set (0.04 sec)
+
+mysql> select PId,FName,LName,p.DNo from employee e,wrok,department d,project p where LName="Thomson" and (d.SSN=e.SSN or d.SSN=e.SSN) and p.DNo=d.DNo and PId=p.PId;
+ERROR 1146 (42S02): Table 'company1.wrok' doesn't exist
+mysql> select PId,FName,LName,p.DNo from employee e,work,department d,project p where LName="Thomson" and (d.SSN=e.SSN or d.SSN=e.SSN) and p.DNo=d.DNo and PId=p.PId;
+ERROR 1052 (23000): Column 'PId' in field list is ambiguous
+mysql> select PId,FName,LName,p.DNo from employee e,work,department d,project p where LName="Thomson" and (d.SSN=e.SSN or d.SSN=e.SSN) and p.DNo=d.DNo;
+ERROR 1052 (23000): Column 'PId' in field list is ambiguous
+mysql> select p.PId,e.FName,e.LName,p.DNo from employee e,work,department d,project p where LName="Thomson" and (d.SSN=e.SSN or d.SSN=e.SSN) and p.DNo=d.DNo;
++-----+-------+---------+------+
+| PId | FName | LName   | DNo  |
++-----+-------+---------+------+
+|   3 | Andy  | Thomson | 1001 |
+|   5 | Andy  | Thomson | 1001 |
+|   1 | Jack  | Thomson | 1002 |
+|   3 | Andy  | Thomson | 1001 |
+|   5 | Andy  | Thomson | 1001 |
+|   1 | Jack  | Thomson | 1002 |
+|   3 | Andy  | Thomson | 1001 |
+|   5 | Andy  | Thomson | 1001 |
+|   1 | Jack  | Thomson | 1002 |
+|   3 | Andy  | Thomson | 1001 |
+|   5 | Andy  | Thomson | 1001 |
+|   1 | Jack  | Thomson | 1002 |
+|   3 | Andy  | Thomson | 1001 |
+|   5 | Andy  | Thomson | 1001 |
+|   1 | Jack  | Thomson | 1002 |
+|   3 | Andy  | Thomson | 1001 |
+|   5 | Andy  | Thomson | 1001 |
+|   1 | Jack  | Thomson | 1002 |
++-----+-------+---------+------+
+18 rows in set (0.03 sec)
+
+mysql> select *from employee where LName like LName="oms" and FName="A%";
+Empty set (0.03 sec)
+
+mysql> select *from employee where LName like LName="%oms%" and FName="A%";
+Empty set (0.00 sec)
+
+mysql> select *from employee where LName like "%oms%" and FName like "A%";
++-------+---------+-----+------+--------+--------+---------+------+------+
+| FName | LName   | SSN | Age  | Gender | Salary | Address | DNo  | SSSN |
++-------+---------+-----+------+--------+--------+---------+------+------+
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America | 1001 |  106 |
++-------+---------+-----+------+--------+--------+---------+------+------+
+1 row in set (0.00 sec)
+
+mysql> select *from employee where DNo=102 and Salary between 2000 and 200000;
+Empty set (0.00 sec)
+
+mysql> select *from employee where DNo=1002 and Salary between 2000 and 200000;
++--------+----------+-----+------+--------+--------+---------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+---------+------+------+
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India   | 1002 | NULL |
++--------+----------+-----+------+--------+--------+---------+------+------+
+1 row in set (0.00 sec)
+
+mysql> update employee e, department d set Salary=Salary+(Salary *0.12) where e.DNo=d.DNo and d.DName="Finance";
+Query OK, 3 rows affected (0.16 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select *from employee;
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack   | Thomson  | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Jace   | Miller   | 105 |   34 | Male   | 302400 | India     | 1004 |  107 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 | NULL |
+| Wilson | Jones    | 108 |   34 | Male   | 324800 | China     | 1004 | NULL |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 | NULL |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |
++--------+----------+-----+------+--------+--------+-----------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> select *from project;
++---------+-----+-----------+------+
+| PName   | PId | PLocation | DNo  |
++---------+-----+-----------+------+
+| panther |   1 | Mumbai    | 1002 |
+| Eagle   |   2 | New York  | 1003 |
+| Green   |   3 | Beijing   | 1001 |
+| Lion    |   4 | Delhi     | 1004 |
+| Falcon  |   5 | Colombo   | 1001 |
++---------+-----+-----------+------+
+5 rows in set (0.00 sec)
+
+mysql> select *from employee e, department d where e.DNo=d.DNo order by d.DName;
++--------+----------+-----+------+--------+--------+-----------+------+------+------------+------+------+---------------+
+| FName  | LName    | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN | DName      | DNo  | SSN  | Starting_Date |
++--------+----------+-----+------+--------+--------+-----------+------+------+------------+------+------+---------------+
+| Jack   | Thomson  | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 | Finance    | 1004 |  103 |          2002 |
+| Jace   | Miller   | 105 |   34 | Male   | 302400 | India     | 1004 |  107 | Finance    | 1004 |  103 |          2002 |
+| Wilson | Jones    | 108 |   34 | Male   | 324800 | China     | 1004 | NULL | Finance    | 1004 |  103 |          2002 |
+| Amaya  | James    | 104 |   36 | Female | 290000 | Australia | 1003 |  109 | marketing  | 1003 |  104 |          2000 |
+| Davis  | Miller   | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL | marketing  | 1003 |  104 |          2000 |
+| Smith  | Jordon   | 110 |   35 | Male   | 220000 | America   | 1003 |  108 | marketing  | 1003 |  104 |          2000 |
+| Andy   | Thomson  | 101 |   34 | Female | 230000 | America   | 1001 |  106 | prodction  | 1001 |  101 |          2000 |
+| Nick   | James    | 103 |   35 | Female | 270000 | China     | 1002 |  107 | purchasing | 1002 |  102 |          1999 |
+| Wilson | Williams | 107 |   33 | Male   | 200000 | India     | 1002 | NULL | purchasing | 1002 |  102 |          1999 |
+| Smith  | Johnson  | 109 |   36 | Male   | 280000 | America   | 1002 | NULL | purchasing | 1002 |  102 |          1999 |
++--------+----------+-----+------+--------+--------+-----------+------+------+------------+------+------+---------------+
+10 rows in set (0.03 sec)
+
+mysql> select p.PId ,e.FName ,e.LName from employee e, department d,project p where p.DNo=d.DNo and d.SSN=e.SSN and e.LName="Thomson";
++-----+-------+---------+
+| PId | FName | LName   |
++-----+-------+---------+
+|   3 | Andy  | Thomson |
+|   5 | Andy  | Thomson |
+|   1 | Jack  | Thomson |
++-----+-------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select e.*,p.PId from employee e, project p,department d where e.DNo=p.DNo and e.DNo=1003 and p.DNo=d.DNo;
++-------+--------+-----+------+--------+--------+-----------+------+------+-----+
+| FName | LName  | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN | PId |
++-------+--------+-----+------+--------+--------+-----------+------+------+-----+
+| Amaya | James  | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |   2 |
+| Davis | Miller | 106 |   37 | Male   | 300000 | SriLanka  | 1003 | NULL |   2 |
+| Smith | Jordon | 110 |   35 | Male   | 220000 | America   | 1003 |  108 |   2 |
++-------+--------+-----+------+--------+--------+-----------+------+------+-----+
+3 rows in set (0.00 sec)
+
+mysql> select e.* from employee e,department d,dependent where d.SSN=e.SSN and d.SSN=e.SSN;
++-------+---------+-----+------+--------+--------+-----------+------+------+
+| FName | LName   | SSN | Age  | Gender | Salary | Address   | DNo  | SSSN |
++-------+---------+-----+------+--------+--------+-----------+------+------+
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack  | Thomson | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 |
+| Nick  | James   | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya | James   | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack  | Thomson | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 |
+| Nick  | James   | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya | James   | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack  | Thomson | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 |
+| Nick  | James   | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya | James   | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack  | Thomson | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 |
+| Nick  | James   | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya | James   | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
+| Andy  | Thomson | 101 |   34 | Female | 230000 | America   | 1001 |  106 |
+| Jack  | Thomson | 102 |   36 | Male   | 246400 | Japan     | 1004 |  108 |
+| Nick  | James   | 103 |   35 | Female | 270000 | China     | 1002 |  107 |
+| Amaya | James   | 104 |   36 | Female | 290000 | Australia | 1003 |  109 |
++-------+---------+-----+------+--------+--------+-----------+------+------+
+20 rows in set (0.03 sec)
+
+mysql> select *from employee where Salary>(select max(Salary) from employee e,department d where e.DNo=d.DNo and DNo=1002;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select *from employee where Salary>(select max(Salary) from employee e,department d where e.DNo=d.DNo and e.DNo=1002;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select *from employee where Salary>(select max(Salary) from employee e,department d where e.DNo=d.DNo and d.DNo=1002;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> exit;
